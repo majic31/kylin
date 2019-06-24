@@ -32,6 +32,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class PushDownRunnerJdbcImpl extends AbstractPushdownRunner {
 
@@ -75,7 +76,8 @@ public class PushDownRunnerJdbcImpl extends AbstractPushdownRunner {
         }
     }
 
-    private SelectedColumnMeta extractColumnMeta(ResultSetMetaData resultSetMetaData, int columnIndex) throws SQLException {
+    private SelectedColumnMeta extractColumnMeta(ResultSetMetaData resultSetMetaData, int columnIndex)
+            throws SQLException {
         boolean isAutoIncrement = false;
         try {
             isAutoIncrement = resultSetMetaData.isAutoIncrement(columnIndex);
@@ -246,7 +248,7 @@ public class PushDownRunnerJdbcImpl extends AbstractPushdownRunner {
             return Types.DATE;
         } else if ("timestamp".equalsIgnoreCase(type)) {
             return Types.TIMESTAMP;
-        } else if ("decimal".equalsIgnoreCase(type)) {
+        } else if (type.toLowerCase(Locale.ROOT).startsWith("decimal")) {
             return Types.DECIMAL;
         } else if ("binary".equalsIgnoreCase(type)) {
             return Types.BINARY;
@@ -256,6 +258,12 @@ public class PushDownRunnerJdbcImpl extends AbstractPushdownRunner {
             return Types.ARRAY;
         } else if ("struct".equalsIgnoreCase(type)) {
             return Types.STRUCT;
+        } else if ("integer".equalsIgnoreCase(type)) {
+            return Types.INTEGER;
+        } else if ("time".equalsIgnoreCase(type)) {
+            return Types.VARCHAR;
+        } else if ("varbinary".equalsIgnoreCase(type)) {
+            return Types.BINARY;
         }
         throw new SQLException("Unrecognized column type: " + type);
     }
