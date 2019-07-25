@@ -15,12 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package org.apache.kylin.source.jdbc;
 
-public class JdbcDialect {
-    public static final String DIALECT_VERTICA = "vertica";
-    public static final String DIALECT_ORACLE = "oracle";
-    public static final String DIALECT_MYSQL = "mysql";
-    public static final String DIALECT_HIVE = "hive";
-    public static final String DIALECT_MSSQL = "mssql";
+package org.apache.kylin.exception;
+
+/**
+ *
+ */
+public class QueryOnCubeException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+
+    public QueryOnCubeException() {
+        super();
+    }
+
+    public QueryOnCubeException(String s) {
+        super(s);
+    }
+
+    public QueryOnCubeException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public QueryOnCubeException(Throwable cause) {
+        super(cause);
+    }
 }

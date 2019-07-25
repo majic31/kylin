@@ -15,21 +15,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.kylin.source.jdbc.metadata;
 
-import org.apache.kylin.source.jdbc.JdbcDialect;
-import org.junit.Assert;
-import org.junit.Test;
+package org.apache.kylin.common;
 
-public class JdbcMetadataFactoryTest {
+/**
+ * Decide sql pattern according to dialect from differenct data source
+ */
+public enum SourceDialect {
+    HIVE("hive"),
 
-    @Test
-    public void testGetJdbcMetadata() {
-        Assert.assertTrue(
-                JdbcMetadataFactory.getJdbcMetadata(JdbcDialect.DIALECT_MSSQL, null) instanceof SQLServerJdbcMetadata);
-        Assert.assertTrue(
-                JdbcMetadataFactory.getJdbcMetadata(JdbcDialect.DIALECT_MYSQL, null) instanceof MySQLJdbcMetadata);
-        Assert.assertTrue(
-                JdbcMetadataFactory.getJdbcMetadata(JdbcDialect.DIALECT_VERTICA, null) instanceof DefaultJdbcMetadata);
+    /**
+     * Support MySQL 5.7
+     */
+    MYSQL("mysql"),
+
+    /**
+     * Support Microsoft Sql Server 2017
+     */
+    SQL_SERVER("mssql"),
+
+    VERTICA("vertica"),
+
+    /**
+     * Others
+     */
+    UNKNOWN("unknown");
+
+    String source;
+
+    SourceDialect(String source) {
+        this.source = source;
+    }
+
+    public static SourceDialect getDialect(String name) {
+
+        for (SourceDialect dialect : SourceDialect.values()) {
+            if (dialect.source.equalsIgnoreCase(name)) {
+                return dialect;
+            }
+        }
+        return UNKNOWN;
     }
 }
